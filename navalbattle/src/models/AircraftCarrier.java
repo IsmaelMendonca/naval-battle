@@ -3,9 +3,10 @@ package models;
 import abstracts.Ship;
 import base.Coordinate;
 import enums.ShipType;
-import interfaces.IShip;
+import interfaces.IOceanObserver;
+import interfaces.IShotObserver;
 
-public class AircraftCarrier extends Ship implements IShip<AircraftCarrier> {
+public class AircraftCarrier extends Ship implements IShotObserver {
 	public AircraftCarrier(Coordinate startPosition) {
 		super(ShipType.FIVE_SIZE_SHIP, startPosition);
 	}
@@ -204,5 +205,39 @@ public class AircraftCarrier extends Ship implements IShip<AircraftCarrier> {
 		}
 		
 		return ac;
+	}
+	
+	@Override
+	public void checkShot(Coordinate coordinate) {
+		if(shipCoordinates.contains(coordinate) && !reachedCoordinates.contains(coordinate)) {
+			reachedCoordinates.add(coordinate);
+		
+			if(reachedCoordinates.size() == shipCoordinates.size()) {
+				isDestroyed = true;
+				System.out.println("\nMas que pancada! Voce e o mehor atirador que conheco! acabou de destruir o meu unico porta avioes de cinco posicoes!");
+			} else {
+				System.out.println("\nParabens voce acertou o meu porta avioes de cinco posicoes, continue assim!");
+			}
+			notifyObservers();
+		}
+	}
+	
+	@Override
+	public void registerObserver(IOceanObserver observer) {
+		if(!oceanObservers.contains(observer))
+			oceanObservers.add(observer);
+	}
+
+	@Override
+	public void removeObserver(IOceanObserver observer) {
+		if(oceanObservers.contains(observer))
+			oceanObservers.add(observer);
+	}
+
+	@Override
+	public void notifyObservers() {
+		for (IOceanObserver observer : oceanObservers) {
+			observer.updateOcean();
+		}
 	}
 }

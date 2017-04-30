@@ -6,12 +6,15 @@ import java.util.Random;
 
 import base.Coordinate;
 import enums.ShipType;
+import interfaces.IOceanObserver;
+import interfaces.IOceanSubject;
 
-public abstract class Ship {
+public abstract class Ship implements IOceanSubject {
 	protected ShipType type;
 	protected Coordinate startPosition;
 	protected List<Coordinate> shipCoordinates;
 	protected List<Coordinate> reachedCoordinates;
+	protected List<IOceanObserver> oceanObservers;
 	protected boolean isDestroyed;
 	
 	protected static final int TOP = 0;
@@ -26,6 +29,7 @@ public abstract class Ship {
 		this.reachedCoordinates = new ArrayList<>();
 		this.shipCoordinates = new ArrayList<>();
 		this.isDestroyed = false;
+		this.oceanObservers = new ArrayList<>();
 	}
 	
 	protected static Coordinate getStartCoordinate() {
