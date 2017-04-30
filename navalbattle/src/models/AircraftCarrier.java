@@ -1,0 +1,208 @@
+package models;
+
+import abstracts.Ship;
+import base.Coordinate;
+import enums.ShipType;
+import interfaces.IShip;
+
+public class AircraftCarrier extends Ship implements IShip<AircraftCarrier> {
+	public AircraftCarrier(Coordinate startPosition) {
+		super(ShipType.FIVE_SIZE_SHIP, startPosition);
+	}
+
+	public static AircraftCarrier createShip() {
+		int direction = getRandomNumber(true);
+		Coordinate startPosition = getStartCoordinate();
+		AircraftCarrier ac = null;
+		
+		if(direction == TOP) {
+			if(startPosition.getPositionY() - 2 < 1) {
+				direction = RIGHT;
+				
+				if(startPosition.getPositionX() + 2  > 10) {
+					direction = BOTTOM;
+					
+					if(startPosition.getPositionY() + 2 > 10) {
+						direction = LEFT;
+						
+						if(startPosition.getPositionX() - 2 < 1) {
+							return createShip();
+						} else {
+							ac = generateLeftShip(startPosition);
+						}
+					} else {
+						ac = generateBottomShip(startPosition);
+					}
+				} else {
+					ac = generateRightShip(startPosition);
+				}
+			} else {
+				ac = generateTopShip(startPosition);
+			}
+		}
+		
+		if(direction == RIGHT) {	
+			if(startPosition.getPositionX() + 2  > 10) {
+				direction = BOTTOM;
+				
+				if(startPosition.getPositionY() + 2 > 10) {
+					direction = LEFT;
+					
+					if(startPosition.getPositionX() - 2 < 1) {
+						direction = TOP;
+						
+						if(startPosition.getPositionY() - 2 < 1) {
+							return createShip();
+						} else {
+							ac = generateTopShip(startPosition);
+						}
+					} else {
+						ac = generateLeftShip(startPosition);
+					}
+				} else {
+					ac = generateBottomShip(startPosition);
+				}
+			} else {
+				ac = generateRightShip(startPosition);
+			}
+		}
+		
+		if(direction == BOTTOM) {
+			if(startPosition.getPositionY() + 2 > 10) {
+				direction = LEFT;
+				
+				if(startPosition.getPositionX() - 2 < 1) {
+					direction = TOP;
+					
+					if(startPosition.getPositionY() - 2 < 1) {
+						direction = RIGHT;
+						
+						if(startPosition.getPositionX() + 2  > 10) {
+							return createShip();
+						} else {
+							ac = generateRightShip(startPosition);
+						}
+					} else {
+						ac = generateTopShip(startPosition);
+					}
+				} else {
+					ac = generateLeftShip(startPosition);
+				}
+			} else {
+				ac = generateBottomShip(startPosition);
+			}	
+		}
+		
+		if(direction == LEFT) {
+				if(startPosition.getPositionX() - 2 < 1) {
+					direction = TOP;
+					
+					if(startPosition.getPositionY() - 2 < 1) {
+						direction = RIGHT;
+						
+						if(startPosition.getPositionX() + 2  > 10) {
+							direction = BOTTOM;
+							
+							if(startPosition.getPositionY() + 2 > 10) {
+								return createShip();
+							} else {
+								ac = generateBottomShip(startPosition);
+							}	
+						} else {
+							ac = generateRightShip(startPosition);
+						}
+					} else {
+						ac = generateTopShip(startPosition);
+					}
+				} else {
+					ac = generateLeftShip(startPosition);
+				}
+		}
+		
+		return ac;
+	}
+
+	private static AircraftCarrier generateTopShip(Coordinate startPosition) {
+		AircraftCarrier ac;
+		ac = new AircraftCarrier(startPosition);
+		
+		if(startPosition.getPositionX() - 2 < 1) {
+			ac.getShipCoordinates().add(startPosition);
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+1, startPosition.getPositionY()));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+1, startPosition.getPositionY()-1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+1, startPosition.getPositionY()-2));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+2, startPosition.getPositionY()));
+		} else {	
+			ac.getShipCoordinates().add(startPosition);
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-1, startPosition.getPositionY()));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-1, startPosition.getPositionY()-1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-1, startPosition.getPositionY()-2));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-2, startPosition.getPositionY()));
+		}
+		
+		return ac;
+	}
+	
+	private static AircraftCarrier generateRightShip(Coordinate startPosition) {
+		AircraftCarrier ac;
+		ac = new AircraftCarrier(startPosition);
+		
+		if(startPosition.getPositionY() - 2 < 1) {
+			ac.getShipCoordinates().add(startPosition);
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX(), startPosition.getPositionY()+1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX(), startPosition.getPositionY()+2));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+1, startPosition.getPositionY()+1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+2, startPosition.getPositionY()+1));	
+		} else {	
+			ac.getShipCoordinates().add(startPosition);
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX(), startPosition.getPositionY()-1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX(), startPosition.getPositionY()-2));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+1, startPosition.getPositionY()-1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+2, startPosition.getPositionY()-1));
+		}
+		
+		return ac;
+	}
+	
+	private static AircraftCarrier generateBottomShip(Coordinate startPosition) {
+		AircraftCarrier ac;
+		ac = new AircraftCarrier(startPosition);
+		
+		if(startPosition.getPositionX() - 2 < 1) {
+			ac.getShipCoordinates().add(startPosition);
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+1, startPosition.getPositionY()));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+1, startPosition.getPositionY()+1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+1, startPosition.getPositionY()+2));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()+2, startPosition.getPositionY()));
+		} else {	
+			ac.getShipCoordinates().add(startPosition);
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-1, startPosition.getPositionY()));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-1, startPosition.getPositionY()+1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-1, startPosition.getPositionY()+2));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-2, startPosition.getPositionY()));
+		}
+		
+		return ac;
+	}
+	
+	private static AircraftCarrier generateLeftShip(Coordinate startPosition) {
+		AircraftCarrier ac;
+		ac = new AircraftCarrier(startPosition);
+		
+		if(startPosition.getPositionY() - 2 < 1) {
+			ac.getShipCoordinates().add(startPosition);
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX(), startPosition.getPositionY()+1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX(), startPosition.getPositionY()+2));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-1, startPosition.getPositionY()+1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-2, startPosition.getPositionY()+1));	
+		} else {	
+			ac.getShipCoordinates().add(startPosition);
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX(), startPosition.getPositionY()-1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX(), startPosition.getPositionY()-2));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-1, startPosition.getPositionY()-1));
+			ac.getShipCoordinates().add(new Coordinate(startPosition.getPositionX()-2, startPosition.getPositionY()-1));
+		}
+		
+		return ac;
+	}
+}
